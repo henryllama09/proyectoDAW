@@ -1,0 +1,29 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_proyectoDAW
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_clase
+      MYSQL_DATABASE: taller
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+
+  web:
+    build: .
+    container_name: php_proyectoDAW
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: taller
+      DB_USER: root
+      DB_PASS: root_password_clase
+      BASE_URL: ""
+    depends_on:
+      - db
